@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Customers;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('customers/{id}', [Customers::class, 'getCustomer'])->middleware('log.route')->name('customers.get');
+Route::post('customers', [Customers::class, 'createCustomer'])->middleware('log.route')->name('customers.create');
+Route::delete('customers/{id}', [Customers::class, 'deleteCustomer'])->middleware('log.route')->name('customers.delete');
