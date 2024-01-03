@@ -7,12 +7,27 @@ use App\Models\Customer;
 
 class Customers extends Controller
 {
+    private function buildGetQuery(Request $request)
+    {
+        return Customer::select('name', 'last_name', 'address')
+            ->with('region', function ($query) {
+                $query->select('description')->with('commune');
+            })
+            ->where(function ($query) use ($request) {
+                $query->orWhere('dni', '=', $request->id)
+                    ->orWhere('email', '=', $request->id);
+            });
+    }
+
     public function getCustomer(Request $request)
     {
-        $customer = Customer::where('status', '!=', 'trash')->orWhere([['dni', $request->get('id')], ['email', $request->get('id')]])->first();
+        $customer = $this->buildGetQuery($request)->where('status', 'A')->first();
 
         if (!$customer) {
-            return  response()->json(['message' => 'Resource not found', 'success' => false], 404);
+            return  response()->json([
+                'message' => 'Resource not found',
+                'success' => false
+            ], 404);
         }
         return  response()->json(['data' => $customer, 'success' => true], 200);
     }
@@ -22,19 +37,33 @@ class Customers extends Controller
         $customer = Customer::create($request->all());
 
         if (!$customer) {
-            return  response()->json(['data' => $customer, 'success' => true], 201);
+            return  response()->json([
+                'data' => $customer,
+                'success' => true
+            ], 201);
         }
 
-        return  response()->json(['data' => [], 'success' => false]);
+        return  response()->json([
+            'message' => 'Error to create resource',
+            'success' => false
+        ], 400);
     }
 
     public function deleteCustomer(Request $request)
     {
-        $customer = Customer::where('status', '!=', 'trash')->orWhere([['dni', $request->get('id')], ['email', $request->get('id')]])->update('status', 'trash');
-        if (!$customer) {
-            return  response()->json($customer, 201);
-        }
+        $customer = $this->buildGetQuery($request)
+            ->where('status', '!=', 'trash')
+            ->update(['status' => 'trash']);
 
-        return  response()->json(['message' => 'Resource not found', 'success' => false], 404);
+        if (!$customer) {
+            return  response()->json([
+                'message' => 'Resource not found',
+                'success' => false
+            ], 404);
+        }
+        return  response()->json([
+            'message' => 'Resource deleted successfully',
+            'success' => true
+        ], 201);
     }
 }

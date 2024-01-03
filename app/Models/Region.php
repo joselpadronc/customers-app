@@ -17,20 +17,10 @@ class Region extends Model
      * @var string
      */
     protected $primaryKey = 'id_reg';
+    public $timestamps = false;
 
     /**
      * @var array
      */
     protected $fillable = ['description', 'status'];
-
-    protected $casts = [
-        'status' => Status::class,
-    ];
-}
-
-enum Status: string
-{
-    case Active = 'A';
-    case Inactive = 'I';
-    case Trash = 'trash';
 }

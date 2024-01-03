@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customers;
 
@@ -15,10 +14,8 @@ use App\Http\Controllers\Customers;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('log.route')->controller(Customers::class)->group(function () {
+    Route::get('/customers/{id}', 'getCustomer')->name('customers.get');
+    Route::post('/customers', 'createCustomer')->middleware('validate.data.customer')->name('customers.create');
+    Route::delete('/customers/{id}', 'deleteCustomer')->name('customers.delete');
 });
-
-Route::get('customers/{id}', [Customers::class, 'getCustomer'])->middleware('log.route')->name('customers.get');
-Route::post('customers', [Customers::class, 'createCustomer'])->middleware('log.route')->name('customers.create');
-Route::delete('customers/{id}', [Customers::class, 'deleteCustomer'])->middleware('log.route')->name('customers.delete');

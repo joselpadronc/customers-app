@@ -23,20 +23,20 @@ class Customer extends Model
      * @var string
      */
     protected $primaryKey = 'dni';
+    public $timestamps = false;
 
     /**
      * @var array
      */
     protected $fillable = ['id_com', 'id_reg', 'email', 'name', 'last_name', 'address', 'date_reg', 'status'];
 
-    protected $casts = [
-        'status' => Status::class,
-    ];
-}
+    public function commune()
+    {
+        return $this->hasOne("App\Models\Commune", 'id_com', 'id_com');
+    }
 
-enum Status: string
-{
-    case Active = 'A';
-    case Inactive = 'I';
-    case Trash = 'trash';
+    public function region()
+    {
+        return $this->hasOne("App\Models\Region", 'id_reg', 'id_reg');
+    }
 }
