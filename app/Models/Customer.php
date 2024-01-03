@@ -28,7 +28,7 @@ class Customer extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_com', 'id_reg', 'email', 'name', 'last_name', 'address', 'date_reg', 'status'];
+    protected $fillable = ['dni', 'id_com', 'id_reg', 'email', 'name', 'last_name', 'address', 'date_reg', 'status'];
 
     public function commune()
     {

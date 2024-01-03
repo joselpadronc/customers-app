@@ -34,19 +34,20 @@ class Customers extends Controller
 
     public function createCustomer(Request $request)
     {
-        $customer = Customer::create($request->all());
+
+        $customer = Customer::create([...$request->all(), 'date_reg' => \Carbon\Carbon::now()]);
 
         if (!$customer) {
             return  response()->json([
-                'data' => $customer,
-                'success' => true
-            ], 201);
+                'message' => 'Error to create resource',
+                'success' => false
+            ], 400);
         }
 
         return  response()->json([
-            'message' => 'Error to create resource',
-            'success' => false
-        ], 400);
+            'data' => $customer,
+            'success' => true
+        ], 201);
     }
 
     public function deleteCustomer(Request $request)

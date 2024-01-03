@@ -36,7 +36,7 @@ class ValidateEntryDataCustomer
             $findRegion = Region::where('id_reg', $request->get('id_reg'))->first();
             $findCommune = Commune::where([['id_com', $request->get('id_com')], ['id_reg', $request->get('id_reg')]])->first();
 
-            if ($validateFields->fails() || $findRegion || $findCommune) {
+            if ($validateFields->fails() || !$findRegion || !$findCommune) {
                 return response()->json(['message' => 'Error in data to create resource', 'success' => false]);
             }
         }
