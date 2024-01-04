@@ -84,6 +84,8 @@ DB_PASSWORD=
 
 **6 -** Ejecutar comando para generar llave de la app `php artisan key:generate`
 
-**7 -** Ejecutar comando para crear usuario default para autenticación y uso de los servicios `php artisan db:seed`
+**7 -** Ejecutar comando para generar llave secreta para jwt `php artisan jwt:secret`
 
-**8 -** Ejecutar servidor de la app con `php artisan serve`
+**8 -** Ejecutar comando para crear usuario default para autenticación y uso de los servicios `php artisan db:seed`
+
+**9 -** Ejecutar servidor de la app con `php artisan serve`
