@@ -65,7 +65,7 @@ ENGINE = MyISAM;
 ```
 APP_NAME=Laravel
 APP_ENV=production
-APP_KEY=base64:1gTi2nNAvjnpAuFHpRoFBtEOCLeK0EQAPDqt73/IkO8=
+APP_KEY=
 APP_DEBUG=false
 APP_URL=http://localhost
 
