@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 
@@ -9,19 +10,19 @@ class Customers extends Controller
 {
     private function buildGetQuery(Request $request)
     {
-        return Customer::select('name', 'last_name', 'address')
-            ->with('region', function ($query) {
-                $query->select('description')->with('commune');
-            })
+        return  DB::table('customers')
+            ->join('regions', 'customers.id_reg', '=', 'regions.id_reg')
+            ->join('communes', 'customers.id_reg', '=', 'communes.id_com')
+            ->select('customers.name', 'customers.last_name', 'customers.address', 'regions.description as description_reg', 'communes.description as description_com')
             ->where(function ($query) use ($request) {
-                $query->orWhere('dni', '=', $request->id)
-                    ->orWhere('email', '=', $request->id);
+                $query->orWhere('customers.dni', '=', $request->id)
+                    ->orWhere('customers.email', '=', $request->id);
             });
     }
 
     public function getCustomer(Request $request)
     {
-        $customer = $this->buildGetQuery($request)->where('status', 'A')->first();
+        $customer = $this->buildGetQuery($request)->where('customers.status', 'A')->first();
 
         if (!$customer) {
             return  response()->json([
@@ -60,8 +61,8 @@ class Customers extends Controller
     public function deleteCustomer(Request $request)
     {
         $customer = $this->buildGetQuery($request)
-            ->where('status', '!=', 'trash')
-            ->update(['status' => 'trash']);
+            ->where('customers.status', '!=', 'trash')
+            ->update(['customers.status' => 'trash']);
 
         if (!$customer) {
             return  response()->json([
