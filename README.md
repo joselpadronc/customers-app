@@ -2,7 +2,7 @@
 
 ### Configuración
 
-\***\*1 -** Una vez clonado el repositorio en su local, realizar la instalación de dependencias con `composer install`
+**1 -** Una vez clonado el repositorio en su local, realizar la instalación de dependencias con `composer install`
 
 **2 -** Crear una nueva base de datos en su local con el nombre **mydb**
 
@@ -60,15 +60,13 @@ ENGINE = MyISAM;
 
 ```
 
-**5 -** Ejecutar comando para generar llave de la pp `php artisan key:generate`
-
-**6 -** Crear un archivo .env con el siguiente contenido
+**5 -** Crear un archivo .env con el siguiente contenido
 
 ```
 APP_NAME=Laravel
 APP_ENV=production
 APP_KEY=base64:1gTi2nNAvjnpAuFHpRoFBtEOCLeK0EQAPDqt73/IkO8=
-APP_DEBUG=true
+APP_DEBUG=false
 APP_URL=http://localhost
 
 LOG_CHANNEL=stack
@@ -83,6 +81,8 @@ DB_USERNAME=root
 DB_PASSWORD=
 
 ```
+
+**6 -** Ejecutar comando para generar llave de la app `php artisan key:generate`
 
 **7 -** Ejecutar comando para crear usuario default para autenticación y uso de los servicios `php artisan db:seed`
 
