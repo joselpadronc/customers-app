@@ -4,15 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
-
     public function login(Request $request)
     {
         $request->validate([
@@ -21,7 +16,11 @@ class AuthController extends Controller
         ]);
         $credentials = $request->only('email', 'password');
 
-        $token = Auth::attempt($credentials);
+        $token = Auth::claims([
+            'email' => $request->email,
+            'datetime' => \Carbon\Carbon::now()->toISOString(),
+            'random' => Str::random(250)
+        ])->attempt($credentials);
         if (!$token) {
             return response()->json([
                 'success' => false,
@@ -48,18 +47,6 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Successfully logged out',
-        ]);
-    }
-
-    public function refresh()
-    {
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'token' => Auth::refresh(),
-                'email' => Auth::user()->email,
-                'datetime' => \Carbon\Carbon::now()->toISOString()
-            ]
         ]);
     }
 }

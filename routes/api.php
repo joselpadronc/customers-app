@@ -15,13 +15,17 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::middleware('log.route')->controller(AuthController::class)->group(function () {
-    Route::post('/auth/login', [AuthController::class, 'login'])->name('login');
-    Route::get('/auth/logout', [AuthController::class, 'logout'])->name('logout');
-});
+Route::middleware('log.route')->post('/auth/login', [AuthController::class, 'login'])->name('login');
 
-Route::middleware(['log.route', 'auth:api'])->controller(CustomersController::class)->group(function () {
-    Route::get('/customers/{id}', 'getCustomer')->name('customers.get');
-    Route::post('/customers', 'createCustomer')->middleware('validate.data.customer')->name('customers.create');
-    Route::delete('/customers/{id}', 'deleteCustomer')->name('customers.delete');
-});
+Route::group(
+    ["middleware" => ['auth:api', 'log.route']],
+    function () {
+        Route::get('/auth/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('/customers/{id}', [CustomersController::class, 'getCustomer'])
+            ->name('customers.get');
+        Route::post('/customers', [CustomersController::class, 'createCustomer'])->middleware('validate.data.customer')
+            ->name('customers.create');
+        Route::delete('/customers/{id}', [CustomersController::class, 'deleteCustomer'])
+            ->name('customers.delete');
+    }
+);
