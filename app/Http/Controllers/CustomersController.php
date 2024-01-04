@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 
-class Customers extends Controller
+class CustomersController extends Controller
 {
     private function buildGetQuery(Request $request)
     {
